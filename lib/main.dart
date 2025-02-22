@@ -8,10 +8,7 @@ final goRouter = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (context, state) => const LoginPage()),
     GoRoute(path: '/login-success', redirect: (context, state) => '/home'),
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => Scaffold(body: Center(child: Text('Home'))),
-    ),
+    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
   ],
 );
 

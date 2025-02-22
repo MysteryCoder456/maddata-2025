@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +37,13 @@ class HomePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 50,
                     backgroundImage: NetworkImage(
-                        'https://www.example.com/profile_image.jpg'),
+                      'https://www.example.com/profile_image.jpg',
+                    ),
                   ),
                   SizedBox(height: 16),
                   Text(
                     'Username',
-                    style: TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -62,3 +64,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
