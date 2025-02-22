@@ -104,14 +104,7 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          color: const Color.fromARGB(255, 85, 222, 156),
-                          blurRadius: 20,
-                        ),
-                        Shadow(color: Colors.cyan, blurRadius: 10),
-                      ],
+                      color: Colors.white
                     ),
                   ),
                 ),
@@ -124,13 +117,6 @@ class _LoginPageState extends State<LoginPage>
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white, // Fixed color
-                      shadows: [
-                        Shadow(
-                          color: const Color.fromARGB(255, 85, 222, 156),
-                          blurRadius: 20,
-                        ),
-                        Shadow(color: Colors.cyan, blurRadius: 10),
-                      ],
                     ),
                   ),
                 ),
@@ -168,7 +154,7 @@ class TransverseWavePainter extends CustomPainter {
     // Green path paint (for the outer wave)
     Paint paint =
         Paint()
-          ..color = const Color.fromARGB(255, 28, 255, 62).withOpacity(0.9)
+          ..color = const Color.fromARGB(255, 94, 148, 255).withOpacity(0.9)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 7
           ..maskFilter = MaskFilter.blur(BlurStyle.outer, 10);
@@ -178,7 +164,7 @@ class TransverseWavePainter extends CustomPainter {
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 5;
+          ..strokeWidth = 4;
 
     Path path = Path();
     double amplitude = 45;
