@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/animation.dart';
 import 'dart:math';
-
+import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,13 +115,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 }
 
-
 class TransverseWavePainter extends CustomPainter {
   final double animationValue;
 
   TransverseWavePainter(this.animationValue);
 
-@override
+  @override
   void paint(Canvas canvas, Size size) {
     // Green path paint (for the outer wave)
     Paint paint = Paint()
