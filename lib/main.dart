@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // TODO: put these into .env file
+  await Supabase.initialize(
+    url: 'https://nxnrgycurrpxzkskcecz.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bnJneWN1cnJweHprc2tjZWN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyNTMxODQsImV4cCI6MjA1NTgyOTE4NH0.hpK_TYKhLKMNn9ha_cdXFVaXhGaAeHGX6SMevXcdjSw',
+  );
+
   runApp(const MyApp());
 }
 
@@ -32,7 +38,9 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 63, 111, 208)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 63, 111, 208),
+        ),
       ),
       home: const HomePage(),
     );
