@@ -1,28 +1,61 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:math';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'home.dart';
 
 final goRouter = GoRouter(
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const LoginPage()),
-    GoRoute(path: '/login-success', redirect: (context, state) => '/home'),
-    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+    GoRoute(path: '/', builder: (_, _) => const LoginPage()),
+    GoRoute(path: '/login-success', redirect: (_, _) => '/home'),
+    GoRoute(path: '/home', builder: (_, _) => const HomePage()),
   ],
 );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
 
-  // TODO: put these into .env file
   await Supabase.initialize(
-    url: 'https://nxnrgycurrpxzkskcecz.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bnJneWN1cnJweHprc2tjZWN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyNTMxODQsImV4cCI6MjA1NTgyOTE4NH0.hpK_TYKhLKMNn9ha_cdXFVaXhGaAeHGX6SMevXcdjSw',
+    url: dotenv.get('SUPABASE_URL'),
+    anonKey: dotenv.get('SUPABASE_KEY'),
   );
+  Supabase.instance.client.auth.onAuthStateChange.listen(onAuthStateChanged);
 
   runApp(const MyApp());
+}
+
+Future<void> onAuthStateChanged(AuthState state) async {
+  print("Received auth event: ${state.event}");
+  SupabaseClient client = Supabase.instance.client;
+
+  switch (state.event) {
+    case AuthChangeEvent.initialSession:
+    case AuthChangeEvent.signedIn:
+      Session session = state.session!;
+      Map<String, dynamic> userMetadata = session.user.userMetadata!;
+
+      // Upload profile data to Supabase
+      String displayName = userMetadata['full_name'];
+      String avatarUrl = userMetadata['avatar_url'];
+      String spotifyId = userMetadata['provider_id'];
+      await client.from('profiles').upsert({
+        'id': session.user.id,
+        'display_name': displayName,
+        'avatar_url': avatarUrl,
+        'spotify_id': spotifyId,
+      });
+
+      // TODO: fetch user's top tracks and artists from Spotify API
+
+      print("Spotify login was successful!");
+      break;
+
+    default:
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -61,18 +94,11 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Future<void> signInWithSpotify() async {
-    // Login with Spotify
-    // FIX: deep link redirect not working
-    bool success = await Supabase.instance.client.auth.signInWithOAuth(
+    await Supabase.instance.client.auth.signInWithOAuth(
       OAuthProvider.spotify,
-      //redirectTo: "music-matcher://codeboi.dev/login-success",
+      redirectTo: 'music-matcher://codeboi.dev/login-success',
       authScreenLaunchMode: LaunchMode.externalApplication,
     );
-
-    print("Logged in with Spotify: $success");
-    if (success && context.mounted) {
-      context.go('/login-success');
-    }
   }
 
   @override
