@@ -104,10 +104,18 @@ class _LoginPageState extends State<LoginPage>
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     'Music Matcher',
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white, shadows: [
-                      Shadow(color: const Color.fromARGB(255, 85, 222, 156), blurRadius: 20),
-                      Shadow(color: Colors.cyan, blurRadius: 10),
-                    ],),
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          color: const Color.fromARGB(255, 85, 222, 156),
+                          blurRadius: 20,
+                        ),
+                        Shadow(color: Colors.cyan, blurRadius: 10),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -115,14 +123,19 @@ class _LoginPageState extends State<LoginPage>
                   padding: const EdgeInsets.only(bottom: 100),
                   child: Text(
                     'Connections through music!',
-                    style: TextStyle(fontSize: 18, 
-                    fontWeight: FontWeight.bold, 
-                    color: Colors.white, // Fixed color
-                    shadows: [
-                      Shadow(color: const Color.fromARGB(255, 85, 222, 156), blurRadius: 20),
-                      Shadow(color: Colors.cyan, blurRadius: 10),
-                    ],
-                  )),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Fixed color
+                      shadows: [
+                        Shadow(
+                          color: const Color.fromARGB(255, 85, 222, 156),
+                          blurRadius: 20,
+                        ),
+                        Shadow(color: Colors.cyan, blurRadius: 10),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: 50),
                 ElevatedButton(
@@ -134,8 +147,10 @@ class _LoginPageState extends State<LoginPage>
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  child: Text('Login with Spotify',
-                    style: TextStyle(fontSize: 18, color: Colors.black)),
+                  child: Text(
+                    'Login with Spotify',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
                 ),
               ],
             ),
@@ -154,17 +169,19 @@ class TransverseWavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Green path paint (for the outer wave)
-    Paint paint = Paint()
-      ..color = const Color.fromARGB(255, 28, 255, 62).withOpacity(0.9)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 7
-      ..maskFilter = MaskFilter.blur(BlurStyle.outer, 10);
+    Paint paint =
+        Paint()
+          ..color = const Color.fromARGB(255, 28, 255, 62).withOpacity(0.9)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 7
+          ..maskFilter = MaskFilter.blur(BlurStyle.outer, 10);
 
     // White path paint (for the center line of the wave)
-    Paint centerLinePaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 5;
+    Paint centerLinePaint =
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 5;
 
     Path path = Path();
     double amplitude = 45;
@@ -173,12 +190,14 @@ class TransverseWavePainter extends CustomPainter {
 
     for (double x = 0; x < size.width; x += 5) {
       // Adjust sine wave offset using animationValue
-      double y = amplitude * 
-                 (1 + animationValue) * 
-                 (1.5 * animationValue) * 
-                 (1 - animationValue) * 
-                 (1 + animationValue) * 
-                 sin((x * frequency) - (animationValue * 2 * 3.1416)) + yOffset;
+      double y =
+          amplitude *
+              (1 + animationValue) *
+              (1.5 * animationValue) *
+              (1 - animationValue) *
+              (1 + animationValue) *
+              sin((x * frequency) - (animationValue * 2 * 3.1416)) +
+          yOffset;
 
       if (x == 0) {
         path.moveTo(x, y);
@@ -193,12 +212,14 @@ class TransverseWavePainter extends CustomPainter {
     // Draw the center line with white color
     Path centerPath = Path();
     for (double x = 0; x < size.width; x += 5) {
-      double y = amplitude * 
-                 (1 + animationValue) * 
-                 (1.5 * animationValue) * 
-                 (1 - animationValue) * 
-                 (1 + animationValue) * 
-                 sin((x * frequency) - (animationValue * 2 * 3.1416)) + yOffset;
+      double y =
+          amplitude *
+              (1 + animationValue) *
+              (1.5 * animationValue) *
+              (1 - animationValue) *
+              (1 + animationValue) *
+              sin((x * frequency) - (animationValue * 2 * 3.1416)) +
+          yOffset;
 
       if (x == 0) {
         centerPath.moveTo(x, y);
@@ -206,7 +227,7 @@ class TransverseWavePainter extends CustomPainter {
         centerPath.lineTo(x, y);
       }
     }
-    
+
     // Draw the center line in white
     canvas.drawPath(centerPath, centerLinePaint);
   }
