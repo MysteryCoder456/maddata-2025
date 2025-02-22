@@ -7,7 +7,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(0, 0, 0, 0),
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       body: Stack(
         children: [
           AnimatedBuilder(
@@ -63,19 +63,35 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Padding()
-                Text(
-                  'Music Matcher',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 255, 255, 255)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20), // Moves text upwards
+                  child: Text(
+                    'Music Matcher',
+                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
                 ),
+                
                 SizedBox(height: 10),
-                Text(
-                  'Connections through music!',
-                  style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 255, 255, 255)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: Text(
+                    'Connections through music!',
+                    style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 255, 255, 255)),
+                  )
                 ),
                 SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {},
-                  child: Text('Login with Spotify'),
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Change button color
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15), // Adjust size
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100), // Rounded corners
+                  ),
+                ),
+                  child: Text('Login with Spotify',
+                  style: TextStyle(fontSize: 18, color: Colors.black)),
+                  
                 ),
               ],
             ),
@@ -94,14 +110,16 @@ class TransverseWavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = const Color.fromARGB(255, 63, 255, 175).withOpacity(0.5)
+      ..color = const Color.fromARGB(255, 63, 255, 175).withOpacity(0.9)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 4
+      ..maskFilter = MaskFilter.blur(BlurStyle.outer, 5); 
+      
     
     Path path = Path();
-    double amplitude = 40;
+    double amplitude = 45;
     double frequency = 0.05;
-    double yOffset = size.height / 2;
+    double yOffset = size.height / 1.9;
     
     for (double x = 0; x < size.width; x += 5) {
       double y = amplitude * 
