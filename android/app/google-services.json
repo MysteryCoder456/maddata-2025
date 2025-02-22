@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "910157469590",
+    "project_id": "music-matcher-9e5e5",
+    "storage_bucket": "music-matcher-9e5e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910157469590:android:f45a6a41828883c138efb7",
+        "android_client_info": {
+          "package_name": "com.example.maddata2025"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGO7LjhTpWf0gtgfMT7-DN2zBTI6zZBCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
