@@ -39,23 +39,15 @@ Future<void> onAuthStateChanged(AuthState state) async {
   SupabaseClient client = Supabase.instance.client;
 
   switch (state.event) {
-    case AuthChangeEvent.signedIn:
-      if (state.session == null) {
-        goRouter.go('/email-confirm');
-        return;
-      }
     case AuthChangeEvent.initialSession:
-      Session? session = state.session;
-      if (session == null) {
-        return;
-      }
-
+    case AuthChangeEvent.signedIn:
       goRouter.go('/home');
+      Session session = state.session!;
       Map<String, dynamic> userMetadata = session.user.userMetadata!;
 
       // Extract profile data
       String displayName = userMetadata['full_name'];
-      String avatarUrl = userMetadata['avatar_url'];
+      String? avatarUrl = userMetadata['avatar_url'];
       String spotifyId = userMetadata['provider_id'];
 
       // Fetch user's top tracks and artists

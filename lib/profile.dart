@@ -12,14 +12,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final client = Supabase.instance.client;
 
   String location = "Madison, WI";
-  String recentSong = "Cry For Me - The Weeknd";
 
-  void _editProfile(String name) {
+  void _editProfile(String name, String bio) {
     // Create controllers for the bio and location TextFields
     TextEditingController nameController = TextEditingController(text: name);
     TextEditingController locationController = TextEditingController(
       text: location,
     );
+    TextEditingController bioController = TextEditingController(text: bio);
 
     // Show the dialog to edit bio and location
     showDialog(
@@ -32,11 +32,17 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: "Bio"),
+                decoration: InputDecoration(labelText: "Name"),
               ),
               TextField(
                 controller: locationController,
                 decoration: InputDecoration(labelText: "Location"),
+              ),
+              TextField(
+                controller: bioController,
+                maxLines: 8, // Allow bio text to be longer
+                minLines: 2, // Set a minimum height for the bio TextField
+                decoration: InputDecoration(labelText: "Bio"),
               ),
             ],
           ),
@@ -46,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 setState(() {
                   // Save the changes to bio and location
                   name = nameController.text;
+                  bio = bioController.text;
                   location = locationController.text;
                 });
 
@@ -56,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
                 await client
                     .from('profiles')
-                    .update({'id': userId, 'display_name': name})
+                    .update({'id': userId, 'display_name': name, "bio": bio})
                     .eq('id', userId);
 
                 Navigator.pop(context); // Close the dialog after saving
@@ -93,6 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
         final userData = snapshot.data![0];
         final String displayName = userData['display_name'];
         final String? avatarUrl = userData['avatar_url'];
+        final String bio = userData['bio'];
 
         return Scaffold(
           backgroundColor: Colors.black,
@@ -100,16 +108,16 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Colors.black,
             title: Text(
               "Profile",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             actions: [
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.white),
-                onPressed: () => _editProfile(displayName),
-              ),
-              IconButton(
-                icon: Icon(Icons.exit_to_app, color: Colors.red),
-                onPressed: () async => await client.auth.signOut(),
+                onPressed: () => _editProfile(displayName, bio),
               ),
             ],
           ),
@@ -124,10 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     shape: BoxShape.circle,
                     color: Colors.grey[700],
                   ),
-                  child:
-                      avatarUrl == null
-                          ? Icon(Icons.person, size: 50, color: Colors.white)
-                          : ClipOval(child: Image.network(avatarUrl)),
+                  child: Icon(Icons.person, size: 50, color: Colors.white),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -139,9 +144,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   "📍 $location",
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
-                SizedBox(height: 15),
+                //SizedBox(height: 15),
+                //Text(
+                //  "🎵 Recent Song: $recentSong",
+                //  style: TextStyle(color: Colors.white, fontSize: 16),
+                //),
+                SizedBox(height: 40),
                 Text(
-                  "🎵 Recent Song: $recentSong",
+                  "📝Bio: \n$bio",
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'graph.dart';  // Import the GraphPlaceholder widget
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -27,6 +28,10 @@ class StatsPage extends StatelessWidget {
                 fontWeight: FontWeight.bold, // Bold text
               ),
             ),
+            SizedBox(height: 30), // Space between title and graph
+
+            // Add the GraphPlaceholder widget here
+            GraphPlaceholder(), // No need for the image path anymore
           ],
         ),
       ),
