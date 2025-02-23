@@ -84,7 +84,7 @@ class UserCard extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    "Top Track for this week: $topTrack",
+                    "Top Track: $topTrack",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
