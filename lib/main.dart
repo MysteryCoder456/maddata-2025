@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'home.dart';
+import 'utils/spotify.dart';
 
 final goRouter = GoRouter(
   routes: [
@@ -38,20 +39,33 @@ Future<void> onAuthStateChanged(AuthState state) async {
       Session session = state.session!;
       Map<String, dynamic> userMetadata = session.user.userMetadata!;
 
-      // Upload profile data to Supabase
+      // Extract profile data
       String displayName = userMetadata['full_name'];
       String avatarUrl = userMetadata['avatar_url'];
       String spotifyId = userMetadata['provider_id'];
+
+      // Fetch user's top tracks and artists
+      List<dynamic> topTracks = [];
+      List<dynamic> topArtists = [];
+      try {
+        topTracks = await getTopTracks(session.providerToken!);
+        topArtists = await getTopArtists(session.providerToken!);
+      } catch (e) {
+        print("Failed to fetch top stuff: $e");
+        return;
+      }
+
+      // Upload to Supabase
       await client.from('profiles').upsert({
         'id': session.user.id,
         'display_name': displayName,
         'avatar_url': avatarUrl,
         'spotify_id': spotifyId,
+        'match_params': {'top_tracks': topTracks, 'top_artists': topArtists},
       });
 
-      // TODO: fetch user's top tracks and artists from Spotify API
-
       print("Spotify login was successful!");
+      goRouter.go('/home');
       break;
 
     default:
@@ -94,8 +108,11 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Future<void> signInWithSpotify() async {
+    final scopes =
+        'user-read-currently-playing user-top-read user-read-recently-played user-library-read';
     await Supabase.instance.client.auth.signInWithOAuth(
       OAuthProvider.spotify,
+      scopes: scopes,
       redirectTo: 'music-matcher://codeboi.dev/login-success',
       authScreenLaunchMode: LaunchMode.externalApplication,
     );
@@ -130,7 +147,7 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white
+                      color: Colors.white,
                     ),
                   ),
                 ),
