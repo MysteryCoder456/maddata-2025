@@ -36,7 +36,6 @@ Future<void> main() async {
 }
 
 Future<void> onAuthStateChanged(AuthState state) async {
-  print(state);
   SupabaseClient client = Supabase.instance.client;
 
   switch (state.event) {
@@ -71,7 +70,7 @@ Future<void> onAuthStateChanged(AuthState state) async {
       }
 
       // Upload to Supabase
-      await client.from('profiles').upsert({
+      await client.from('profiles').insert({
         'id': session.user.id,
         'display_name': displayName,
         'avatar_url': avatarUrl,
@@ -80,6 +79,10 @@ Future<void> onAuthStateChanged(AuthState state) async {
       });
 
       print("Spotify login was successful!");
+      break;
+
+    case AuthChangeEvent.signedOut:
+      goRouter.go('/');
       break;
 
     default:
