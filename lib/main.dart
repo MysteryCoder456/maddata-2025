@@ -1,17 +1,22 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'email_confirm.dart';
 import 'home.dart';
 import 'utils/spotify.dart';
 
 final goRouter = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (_, _) => const LoginPage()),
-    GoRoute(path: '/login-success', redirect: (_, _) => '/home'),
+    GoRoute(path: '/login-success', redirect: (_, _) => '/'),
+    GoRoute(
+      path: '/email-confirm',
+      builder: (_, _) => const EmailConfirmPage(),
+    ),
     GoRoute(path: '/home', builder: (_, _) => const HomePage()),
   ],
 );
@@ -30,13 +35,19 @@ Future<void> main() async {
 }
 
 Future<void> onAuthStateChanged(AuthState state) async {
-  print("Received auth event: ${state.event}");
+  print(state);
   SupabaseClient client = Supabase.instance.client;
 
   switch (state.event) {
     case AuthChangeEvent.initialSession:
     case AuthChangeEvent.signedIn:
-      Session session = state.session!;
+      Session? session = state.session;
+      if (session == null) {
+        goRouter.go('/email-confirm');
+        return;
+      }
+
+      goRouter.go('/home');
       Map<String, dynamic> userMetadata = session.user.userMetadata!;
 
       // Extract profile data
@@ -65,7 +76,6 @@ Future<void> onAuthStateChanged(AuthState state) async {
       });
 
       print("Spotify login was successful!");
-      goRouter.go('/home');
       break;
 
     default:
