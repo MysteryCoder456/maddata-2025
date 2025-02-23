@@ -1,3 +1,4 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:maddata2025/message_page.dart';
 import 'package:maddata2025/profile.dart';
@@ -10,12 +11,31 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String userId = Supabase.instance.client.auth.currentSession!.user.id;
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
         backgroundColor: Color(0xFF121212), // Background color
         appBar: AppBar(
-          title: Text("Welcome, User!", style: TextStyle(color: Colors.white)),
+          title: StreamBuilder<Object>(
+            stream: Supabase.instance.client
+                .from('profiles')
+                .stream(primaryKey: ['id'])
+                .eq('id', userId),
+            builder: (context, snapshot) {
+              final String username =
+                  (snapshot.data
+                      as List<Map<String, dynamic>>?)?[0]['display_name'] ??
+                  "User";
+              final firstName = username.split(" ")[0];
+
+              return Text(
+                "Welcome, $firstName!",
+                style: TextStyle(color: Colors.white),
+              );
+            },
+          ),
           backgroundColor: Colors.black,
           elevation: 0,
         ),
@@ -24,7 +44,8 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: const TabBar(
-              indicatorColor: Colors.blueAccent, // Color for the selected tab underline
+              indicatorColor:
+                  Colors.blueAccent, // Color for the selected tab underline
               labelColor: Colors.blueAccent, // Color for the selected icon
               unselectedLabelColor: Colors.white, // Color for unselected icons
               dividerColor: Colors.transparent,
