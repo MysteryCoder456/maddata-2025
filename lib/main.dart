@@ -40,6 +40,7 @@ Future<void> onAuthStateChanged(AuthState state) async {
 
   switch (state.event) {
     case AuthChangeEvent.initialSession:
+      await client.auth.signOut();
     case AuthChangeEvent.signedIn:
       goRouter.go('/home');
       Session session = state.session!;
