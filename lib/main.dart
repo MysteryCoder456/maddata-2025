@@ -40,11 +40,14 @@ Future<void> onAuthStateChanged(AuthState state) async {
   SupabaseClient client = Supabase.instance.client;
 
   switch (state.event) {
-    case AuthChangeEvent.initialSession:
     case AuthChangeEvent.signedIn:
+      if (state.session == null) {
+        goRouter.go('/email-confirm');
+        return;
+      }
+    case AuthChangeEvent.initialSession:
       Session? session = state.session;
       if (session == null) {
-        goRouter.go('/email-confirm');
         return;
       }
 
