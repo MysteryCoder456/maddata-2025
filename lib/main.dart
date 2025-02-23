@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
-                    'Music Matcher',
+                    'Wavelength',
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
