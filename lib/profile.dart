@@ -119,6 +119,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icon(Icons.edit, color: Colors.white),
                 onPressed: () => _editProfile(displayName, bio),
               ),
+              IconButton(
+                icon: Icon(Icons.exit_to_app, color: Colors.red),
+                onPressed: client.auth.signOut,
+              ),
             ],
           ),
           body: Center(
