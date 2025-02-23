@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
 
-import 'user_card.dart';
+import 'browser.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF121212), // Background color
-      appBar: AppBar(
-        title: Text("Welcome, User!", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-      ),
-      body: ListView(
-        children: [
-          UserCard(
-            username: "Aria Talathi",
-            topTrack: "Cry For Me - the Weeknd",
-            matchPercent: "95%",
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: Color(0xFF121212), // Background color
+        appBar: AppBar(
+          title: Text("Welcome, User!", style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.black,
+          elevation: 0,
+        ),
+        bottomNavigationBar: PreferredSize(
+          preferredSize: Size.fromHeight(10),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: const TabBar(
+              dividerColor: Colors.transparent,
+              tabs: [
+                Tab(
+                      icon: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
+                        child: Icon(Icons.home, size: 36), // Set your desired icon size here
+                      ),
+                    ),
+                Tab(icon: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 3), // Adjust the bottom padding to move the icon higher
+                        child: Icon(Icons.message, size: 36), )),
+                Tab(icon: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
+                        child: Icon(Icons.language_outlined, size: 36), )),
+                Tab(icon: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
+                        child: Icon(Icons.perm_identity, size: 36),)),
+              ],
+            ),
           ),
-          UserCard(
-            username: "Rehatbir Singh",
-            topTrack: "Gaand Mein Danda",
-            matchPercent: "100%",
-          ),
-        ],
+        ),
+        body: const TabBarView(
+          children: [BrowserView(), Text("TODO"), Text("TODO"), Text("TODO")],
+        ),
       ),
     );
   }
