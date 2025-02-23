@@ -53,15 +53,20 @@ Future<void> onAuthStateChanged(AuthState state) async {
       // Fetch user's top tracks and artists
       List<dynamic> topTracks = await getTopTracks(session.providerToken!);
       List<dynamic> topArtists = await getTopArtists(session.providerToken!);
+      List<String> topGenres = await getTopGenres(session.providerToken!);
 
       // Upload to Supabase
       try {
-        await client.from('profiles').insert({
+        await client.from('profiles').upsert({
           'id': session.user.id,
           'display_name': displayName,
           'avatar_url': avatarUrl,
           'spotify_id': spotifyId,
-          'match_params': {'top_tracks': topTracks, 'top_artists': topArtists},
+          'match_params': {
+            'top_tracks': topTracks,
+            'top_artists': topArtists,
+            'top_genres': topGenres,
+          },
         });
       } catch (e) {
         print(e);

@@ -35,3 +35,16 @@ Future<List<dynamic>> getTopArtists(String providerToken) async {
   }
   return jsonBody['items'];
 }
+
+Future<List<String>> getTopGenres(String providerToken) async {
+  List<dynamic> topArtists = await getTopArtists(providerToken);
+  Set<String> genres = {};
+
+  for (var artist in topArtists) {
+    for (var genre in artist['genres']) {
+      genres.add(genre);
+    }
+  }
+
+  return genres.toList();
+}
