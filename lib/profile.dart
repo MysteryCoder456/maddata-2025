@@ -11,11 +11,13 @@ class _ProfilePageState extends State<ProfilePage> {
   String name= "nkksxkks";
   String location = "Madison, WI";
   String recentSong = "Blinding Lights - The Weeknd";
+  String bio = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
   void _editProfile() {
     // Create controllers for the bio and location TextFields
     TextEditingController nameController = TextEditingController(text: name);
     TextEditingController locationController = TextEditingController(text: location);
+    TextEditingController bioController = TextEditingController(text: bio);
 
     // Show the dialog to edit bio and location
     showDialog(
@@ -28,12 +30,18 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: "Bio"),
+                decoration: InputDecoration(labelText: "Name"),
               ),
               TextField(
                 controller: locationController,
                 decoration: InputDecoration(labelText: "Location"),
               ),
+              TextField(
+                controller: bioController,
+                maxLines: 8, // Allow bio text to be longer
+                minLines: 2, // Set a minimum height for the bio TextField
+                decoration: InputDecoration(labelText: "Bio"),
+              )
             ],
           ),
           actions: [
@@ -66,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("Profile", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        title: Text("Profile", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
         actions: [
           IconButton(
             icon: Icon(Icons.edit, color: Colors.white),
@@ -93,6 +101,8 @@ class _ProfilePageState extends State<ProfilePage> {
             Text("📍 $location", style: TextStyle(color: Colors.white, fontSize: 16)),
             SizedBox(height: 15),
             Text("🎵 Recent Song: $recentSong", style: TextStyle(color: Colors.white, fontSize: 16)),
+            SizedBox(height: 40),
+            Text("📝Bio: \n$bio", style: TextStyle(color: Colors.white, fontSize: 16)),
           ],
         ),
       ),
