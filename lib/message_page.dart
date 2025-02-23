@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MessagePage(),
-    );
-  }
-}
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -22,78 +9,95 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  // Sample data for chats
-  final List<Map<String, dynamic>> chats = List.generate(10, (index) {
-    return {
-      'username': 'User $index',
-      'messages': [
-        {'sender': 'User $index', 'text': 'Hello from User $index!'},
-        {'sender': 'User $index', 'text': 'How are you doing?'},
-      ],
-    };
-  });
-
   String? selectedChat;
   TextEditingController messageController = TextEditingController();
-  String currentUser = 'User 0'; // Change this to the actual user
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text(
-          'Messages',
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              // Search functionality (if needed)
+    final userId = Supabase.instance.client.auth.currentUser!.id;
+    final stream = Supabase.instance.client
+        .from('profiles')
+        .stream(primaryKey: ['id']);
+
+    return StreamBuilder(
+      stream: stream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        final List<Map<String, dynamic>> profiles = snapshot.data!;
+        for (int i = 0; i < profiles.length; i++) {
+          profiles[i]['messages'] = [
+            {
+              'sender': profiles[i]['display_name'],
+              'text': 'Hello from ${profiles[i]['display_name']}.',
             },
+            {
+              'sender': profiles[i]['display_name'],
+              'text': 'Your music taste is GOATED!',
+            },
+          ];
+        }
+
+        // Don't wanna text yourself, right?
+        profiles.removeWhere((profile) => profile['id'] == userId);
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            title: Text('Messages', style: TextStyle(color: Colors.white)),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search, color: Colors.white),
+                onPressed: () {
+                  // Search functionality (if needed)
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      body: selectedChat == null ? _buildChatList() : _buildChatView(),
-      backgroundColor: Colors.black, // Set background to black for the page
+          body:
+              selectedChat == null
+                  ? _buildChatList(profiles)
+                  : _buildChatView(profiles, userId),
+          backgroundColor: Colors.black, // Set background to black for the page
+        );
+      },
     );
   }
 
   // Build the list of chats
-  Widget _buildChatList() {
+  Widget _buildChatList(List<Map<String, dynamic>> profiles) {
     return ListView.builder(
-      itemCount: chats.length,
+      itemCount: profiles.length,
       itemBuilder: (context, index) {
-        final chat = chats[index];
+        final chat = profiles[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             leading: CircleAvatar(
               radius: 25,
               backgroundColor: Colors.grey[700],
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
+              foregroundImage:
+                  chat['avatar_url'] != null
+                      ? NetworkImage(chat['avatar_url'])
+                      : null,
             ),
             title: Text(
-              chat['username'],
+              chat['display_name'],
               style: TextStyle(color: Colors.white),
             ),
             subtitle: Text(
-              chat['messages'].isNotEmpty ? chat['messages'].last['text'] : 'No messages yet',
+              chat['messages'].isNotEmpty
+                  ? chat['messages'].last['text']
+                  : 'No messages yet',
               style: TextStyle(color: Colors.grey),
             ),
-            trailing: Icon(
-              Icons.access_time,
-              color: Colors.grey,
-              size: 20,
-            ),
+            trailing: Icon(Icons.access_time, color: Colors.grey, size: 20),
             onTap: () {
               // Open the specific chat
               setState(() {
-                selectedChat = chat['username'];
+                selectedChat = chat['id'];
               });
             },
           ),
@@ -103,8 +107,9 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   // Build the individual chat view
-  Widget _buildChatView() {
-    final chat = chats.firstWhere((chat) => chat['username'] == selectedChat);
+  Widget _buildChatView(List<Map<String, dynamic>> chats, String currentUser) {
+    final chat = chats.firstWhere((chat) => chat['id'] == selectedChat);
+
     return Column(
       children: [
         // Chat messages
@@ -113,7 +118,8 @@ class _MessagePageState extends State<MessagePage> {
             reverse: true, // Make the most recent message at the bottom
             itemCount: chat['messages'].length,
             itemBuilder: (context, index) {
-              final message = chat['messages'][chat['messages'].length - 1 - index];
+              final message =
+                  chat['messages'][chat['messages'].length - 1 - index];
               bool isCurrentUser = message['sender'] == currentUser;
               return _buildMessageBubble(message['text'], isCurrentUser);
             },
@@ -149,7 +155,10 @@ class _MessagePageState extends State<MessagePage> {
                 onPressed: () {
                   if (messageController.text.isNotEmpty) {
                     setState(() {
-                      chat['messages'].add({'sender': currentUser, 'text': messageController.text});
+                      chat['messages'].add({
+                        'sender': currentUser,
+                        'text': messageController.text,
+                      });
                     });
                     messageController.clear();
                   }
@@ -174,12 +183,10 @@ class _MessagePageState extends State<MessagePage> {
             color: isCurrentUser ? Colors.purple : Colors.grey[700],
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white),
-          ),
+          child: Text(text, style: TextStyle(color: Colors.white)),
         ),
       ),
     );
   }
 }
+
