@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 currentUserId == viewingUserId
                     ? [
                       IconButton(
-                        icon: Icon(Icons.edit, color: Colors.white),
+                        icon: Icon(Icons.edit, color: Colors.black),
                         onPressed: () => _editProfile(displayName, bio),
                       ),
                       IconButton(
