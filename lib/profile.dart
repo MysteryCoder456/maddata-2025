@@ -21,19 +21,28 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(
+            "Edit Profile",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: "Name", hintText: "Your full name"),
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  hintText: "Your full name",
+                ),
               ),
               TextField(
                 controller: bioController,
                 maxLines: 8,
                 minLines: 2,
-                decoration: InputDecoration(labelText: "Bio", hintText: "Tell us about yourself"),
+                decoration: InputDecoration(
+                  labelText: "Bio",
+                  hintText: "Tell us about yourself",
+                ),
               ),
             ],
           ),
@@ -52,7 +61,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 });
 
                 final userId = client.auth.currentUser!.id;
-                await client.auth.updateUser(UserAttributes(data: {"full_name": name}));
+                await client.auth.updateUser(
+                  UserAttributes(data: {"full_name": name}),
+                );
                 await client
                     .from('profiles')
                     .update({'id': userId, 'display_name': name, "bio": bio})
@@ -87,9 +98,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
         final userData = snapshot.data![0];
         final String displayName = userData['display_name'];
-        final String avatarUrl = userData['avatar_url'];
+        final String? avatarUrl = userData['avatar_url'];
         final String bio = userData['bio'];
-        final String recentSong = "Song Title - Artist"; // Placeholder for the most recent song
+        final String recentSong =
+            userData['match_params']['top_tracks'][0]['name'];
 
         return Scaffold(
           appBar: AppBar(
@@ -103,7 +115,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black,
               ),
             ),
-            actions: currentUserId == viewingUserId
+            actions:
+                currentUserId == viewingUserId
                     ? [
                       IconButton(
                         icon: Icon(Icons.edit, color: Colors.white),
@@ -146,9 +159,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.grey[800],
                         border: Border.all(color: Colors.white, width: 3),
                       ),
-                      child: avatarUrl == null
-                          ? Icon(Icons.person, size: 90, color: Colors.white)
-                          : ClipOval(child: Image.network(avatarUrl)),
+                      child:
+                          avatarUrl == null
+                              ? Icon(
+                                Icons.person,
+                                size: 90,
+                                color: Colors.white,
+                              )
+                              : ClipOval(child: Image.network(avatarUrl)),
                     ),
                     SizedBox(height: 26), // Reduced space
                     Text(
@@ -160,23 +178,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     SizedBox(height: 34), // Less spacing between elements
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Text(
-                      "🎶 Most Recent Song:",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Text(
+                        "🎶 Top Song:",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),),
+                    ),
                     SizedBox(height: 4),
                     Text(
                       recentSong,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 40), // Less spacing
@@ -192,10 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
                         bio,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -209,3 +223,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
