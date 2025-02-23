@@ -24,6 +24,9 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: const TabBar(
+              indicatorColor: Colors.blueAccent, // Color for the selected tab underline
+              labelColor: Colors.blueAccent, // Color for the selected icon
+              unselectedLabelColor: Colors.white, // Color for unselected icons
               dividerColor: Colors.transparent,
               tabs: [
                 Tab(
