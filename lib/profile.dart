@@ -11,14 +11,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final client = Supabase.instance.client;
 
-  String location = "Madison, WI";
-
   void _editProfile(String name, String bio) {
     // Create controllers for the bio and location TextFields
     TextEditingController nameController = TextEditingController(text: name);
-    TextEditingController locationController = TextEditingController(
-      text: location,
-    );
     TextEditingController bioController = TextEditingController(text: bio);
 
     // Show the dialog to edit bio and location
@@ -35,10 +30,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 decoration: InputDecoration(labelText: "Name"),
               ),
               TextField(
-                controller: locationController,
-                decoration: InputDecoration(labelText: "Location"),
-              ),
-              TextField(
                 controller: bioController,
                 maxLines: 8, // Allow bio text to be longer
                 minLines: 2, // Set a minimum height for the bio TextField
@@ -53,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Save the changes to bio and location
                   name = nameController.text;
                   bio = bioController.text;
-                  location = locationController.text;
                 });
 
                 // Push changes to Supabase
@@ -145,11 +135,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   displayName,
                   style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "📍 $location",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 //SizedBox(height: 15),
                 //Text(
