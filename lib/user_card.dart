@@ -5,12 +5,14 @@ class UserCard extends StatelessWidget {
   final String username;
   final String topTrack;
   final num matchPercent;
+  //final String avatar_url;
 
   const UserCard({
     super.key,
     required this.username,
     required this.topTrack,
     required this.matchPercent,
+    //this.avatar_url,
   });
 
   @override
@@ -51,10 +53,8 @@ class UserCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        // You can replace with the profile picture URL if available
-                      ),
+                      //ClipOval(child: Image.network(avatar_url)),
+                       //: Icon(Icons.person, size: 90, color: Colors.white),
                       SizedBox(
                         width: 16,
                       ), // Space between profile picture and text

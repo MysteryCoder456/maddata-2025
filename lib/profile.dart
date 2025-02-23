@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
         final userData = snapshot.data![0];
         final String displayName = userData['display_name'];
-        final String? avatarUrl = userData['avatar_url'];
+        final String avatarUrl = userData['avatar_url'];
         final String bio = userData['bio'];
         final String recentSong = "Song Title - Artist"; // Placeholder for the most recent song
 
@@ -126,16 +126,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-              // Music Notes in Background
-              Positioned(top: 50, left: 30, child: Icon(Icons.music_note, color: Colors.white, size: 40)),
-              Positioned(top: 60, right: 100, child: Icon(Icons.music_note, color: Colors.white, size: 35)),
-              Positioned(bottom: 100, left: 70, child: Icon(Icons.music_note, color: Colors.white, size: 38)),
-              Positioned(bottom: 100, right: 150, child: Icon(Icons.music_note, color: Colors.white, size: 45)),
-              Positioned(top: 210, left: 140, child: Icon(Icons.music_note, color: Colors.white, size: 32)),
-              Positioned(bottom: 200, right: 10, child: Icon(Icons.music_note, color: Colors.white, size: 37)),
-              Positioned(top: 200, right: 20, child: Icon(Icons.music_note, color: Colors.white, size: 34)),
-              Positioned(bottom: 50, left: 120, child: Icon(Icons.music_note, color: Colors.white, size: 42)),
-
               Align(
                 alignment: Alignment.topCenter,
                 child: Column(
@@ -164,20 +154,24 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     SizedBox(height: 34), // Less spacing between elements
-                    Text(
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Text(
                       "🎶 Most Recent Song:",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
+                      textAlign: TextAlign.center,
+                    ),),
+                    SizedBox(height: 4),
                     Text(
                       recentSong,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 40), // Less spacing
                     Text(
