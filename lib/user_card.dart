@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'profile.dart'; // Import the ProfilePage
 
 class UserCard extends StatelessWidget {
+  final String userId;
   final String username;
   final String topTrack;
   final num matchPercent;
-  //final String avatar_url;
+  final String? avatarUrl;
 
   const UserCard({
     super.key,
+    required this.userId,
     required this.username,
     required this.topTrack,
     required this.matchPercent,
-    //this.avatar_url,
+    this.avatarUrl,
   });
 
   @override
@@ -29,7 +31,9 @@ class UserCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder:
-                      (context) => ProfilePage(), // Navigate to ProfilePage
+                      (context) => ProfilePage(
+                        userId: userId,
+                      ), // Navigate to ProfilePage
                 ),
               );
             },
@@ -53,8 +57,11 @@ class UserCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      //ClipOval(child: Image.network(avatar_url)),
-                       //: Icon(Icons.person, size: 90, color: Colors.white),
+                      CircleAvatar(
+                        radius: 50,
+                        foregroundImage:
+                            avatarUrl == null ? null : NetworkImage(avatarUrl!),
+                      ),
                       SizedBox(
                         width: 16,
                       ), // Space between profile picture and text
@@ -77,7 +84,7 @@ class UserCard extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    "Top Track for this week: " + topTrack,
+                    "Top Track for this week: $topTrack",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
@@ -89,4 +96,3 @@ class UserCard extends StatelessWidget {
     );
   }
 }
-

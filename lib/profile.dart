@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final String? userId;
+
+  const ProfilePage({super.key, this.userId});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -37,6 +39,12 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           actions: [
             TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog without saving
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
               onPressed: () async {
                 setState(() {
                   name = nameController.text;
@@ -54,12 +62,6 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               child: Text("Save", style: TextStyle(color: Colors.blue)),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Cancel", style: TextStyle(color: Colors.red)),
-            ),
           ],
         );
       },
@@ -68,11 +70,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = client.auth.currentSession!.user.id;
+    final String currentUserId = client.auth.currentSession!.user.id;
+    final String viewingUserId = widget.userId ?? currentUserId;
+
     final stream = client
         .from('profiles')
         .stream(primaryKey: ['id'])
-        .eq('id', userId);
+        .eq('id', viewingUserId);
 
     return StreamBuilder(
       stream: stream,
@@ -99,16 +103,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black,
               ),
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.edit, color: Colors.black),
-                onPressed: () => _editProfile(displayName, bio),
-              ),
-              IconButton(
-                icon: Icon(Icons.exit_to_app, color: Colors.red),
-                onPressed: client.auth.signOut,
-              ),
-            ],
+            actions: currentUserId == viewingUserId
+                    ? [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.white),
+                        onPressed: () => _editProfile(displayName, bio),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.exit_to_app, color: Colors.red),
+                        onPressed: client.auth.signOut,
+                      ),
+                    ]
+                    : [],
           ),
           body: Stack(
             children: [
