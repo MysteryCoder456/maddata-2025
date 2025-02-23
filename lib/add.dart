@@ -15,6 +15,7 @@ class _MoodViewState extends State<MoodView> {
   final List<String> _moods = ['Sad', 'Calm', 'Happy', 'Excited'];
   List<dynamic> _playlist = [];
 
+  // Fetch data from Spotify based on user mood
   Future<void> fetchPlaylist() async {
     final session = Supabase.instance.client.auth.currentSession!;
     final token = session.providerToken;
@@ -50,8 +51,9 @@ class _MoodViewState extends State<MoodView> {
 
       print("Selected Genre: $selectedGenre");
 
+      // Fetch playlist based on selected genre
       final playlistUrl = Uri.parse(
-          'https://api.spotify.com/v1/recommendations/available-genre-seeds');
+          'https://api.spotify.com/v1/recommendations?limit=10&seed_genres=$selectedGenre');
       final playlistResponse = await http.get(playlistUrl, headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -63,8 +65,8 @@ class _MoodViewState extends State<MoodView> {
           _playlist = data['tracks'];
         });
       } else {
-        print("Failed to fetch genres: ${genreResponse.statusCode}");
-        print("Response Body: ${genreResponse.body}");
+        print("Failed to fetch playlists: ${playlistResponse.statusCode}");
+        print("Response Body: ${playlistResponse.body}");
       }
     } else {
       print("Failed to fetch genres: ${genreResponse.statusCode}");
@@ -72,6 +74,7 @@ class _MoodViewState extends State<MoodView> {
     }
   }
 
+  // Get the corresponding emoji based on the selected mood
   Widget _getMoodFace() {
     String mood = _moods[_moodValue.toInt()];
     IconData icon;
@@ -101,11 +104,16 @@ class _MoodViewState extends State<MoodView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Mood Playlist')),
+      appBar: AppBar(
+        title: Text('Mood Playlist'),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Display the mood emoji based on slider value
           _getMoodFace(),
+
+          // Mood slider
           Slider(
             value: _moodValue,
             min: 0,
@@ -116,10 +124,14 @@ class _MoodViewState extends State<MoodView> {
               setState(() => _moodValue = value);
             },
           ),
+
+          // Submit button to fetch playlist
           ElevatedButton(
             onPressed: fetchPlaylist,
-            child: Text('Submit'),
+            child: Text('Generate Playlist'),
           ),
+
+          // Display the playlist with tracks
           Expanded(
             child: ListView.builder(
               itemCount: _playlist.length,
