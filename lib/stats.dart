@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'graph.dart';  // Import the GraphPlaceholder widget
+import 'graph.dart'; // Import the GraphPlaceholder widget
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -11,14 +11,19 @@ class StatsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "Stats", 
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          "Stats",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Padding for some spacing
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align items to the left
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Align items to the left
           children: [
             Text(
               "Weekly Global Stats", // Text displayed at the top
@@ -29,12 +34,12 @@ class StatsPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30), // Space between title and graph
-
             // Add the GraphPlaceholder widget here
-            GraphPlaceholder(), // No need for the image path anymore
+            Image.asset("figure.png", width: 551, height: 423),
           ],
         ),
       ),
     );
   }
 }
+
