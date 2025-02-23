@@ -6,6 +6,7 @@ Future<List<dynamic>> getTopTracks(String providerToken) async {
   final url = Uri.https('api.spotify.com', '/v1/me/top/tracks', {
     'limit': '50',
     'offset': '0',
+    'time_range': 'short_term',
   });
   final response = await http.get(
     url,
@@ -23,6 +24,7 @@ Future<List<dynamic>> getTopArtists(String providerToken) async {
   final url = Uri.https('api.spotify.com', '/v1/me/top/artists', {
     'limit': '50',
     'offset': '0',
+    'time_range': 'short_term',
   });
   final response = await http.get(
     url,

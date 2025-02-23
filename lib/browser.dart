@@ -41,7 +41,7 @@ class _BrowserViewState extends State<BrowserView> {
           final userFuture =
               client
                   .from('profiles')
-                  .select('display_name, match_params')
+                  .select()
                   .eq('id', item['id'])
                   .limit(1)
                   .single();
@@ -52,17 +52,21 @@ class _BrowserViewState extends State<BrowserView> {
               builder: (context, snapshot) {
                 String username = "Username";
                 String topTrack = "Top Track";
+                String? avatarUrl;
 
                 if (snapshot.hasData) {
                   final userData = snapshot.data!;
                   username = userData['display_name'];
                   topTrack = userData['match_params']['top_tracks'][0]['name'];
+                  avatarUrl = userData['avatar_url'];
                 }
 
                 return UserCard(
+                  userId: item['id'],
                   username: username,
                   topTrack: topTrack,
                   matchPercent: matchPercent,
+                  avatarUrl: avatarUrl,
                 );
               },
             ),

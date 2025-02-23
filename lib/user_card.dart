@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'profile.dart'; // Import the ProfilePage
 
 class UserCard extends StatelessWidget {
+  final String userId;
   final String username;
   final String topTrack;
   final num matchPercent;
+  final String? avatarUrl;
 
   const UserCard({
     super.key,
+    required this.userId,
     required this.username,
     required this.topTrack,
     required this.matchPercent,
+    this.avatarUrl,
   });
 
   @override
@@ -27,7 +31,9 @@ class UserCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder:
-                      (context) => ProfilePage(), // Navigate to ProfilePage
+                      (context) => ProfilePage(
+                        userId: userId,
+                      ), // Navigate to ProfilePage
                 ),
               );
             },
@@ -53,7 +59,8 @@ class UserCard extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        // You can replace with the profile picture URL if available
+                        foregroundImage:
+                            avatarUrl == null ? null : NetworkImage(avatarUrl!),
                       ),
                       SizedBox(
                         width: 16,
@@ -77,7 +84,7 @@ class UserCard extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    "Top Track for this week: " + topTrack,
+                    "Top Track for this week: $topTrack",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
@@ -89,4 +96,3 @@ class UserCard extends StatelessWidget {
     );
   }
 }
-
