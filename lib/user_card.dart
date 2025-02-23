@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'profile.dart';  // Import the ProfilePage
+import 'profile.dart'; // Import the ProfilePage
 
 class UserCard extends StatelessWidget {
   final String username;
   final String topTrack;
-  final String matchPercent;
+  final num matchPercent;
 
   const UserCard({
     super.key,
@@ -26,7 +26,8 @@ class UserCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilePage(), // Navigate to ProfilePage
+                  builder:
+                      (context) => ProfilePage(), // Navigate to ProfilePage
                 ),
               );
             },
@@ -54,12 +55,17 @@ class UserCard extends StatelessWidget {
                         radius: 50,
                         // You can replace with the profile picture URL if available
                       ),
-                      SizedBox(width: 16), // Space between profile picture and text
+                      SizedBox(
+                        width: 16,
+                      ), // Space between profile picture and text
                       Padding(
                         padding: const EdgeInsets.only(left: 150, bottom: 30),
                         child: Text(
-                          matchPercent,
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          "${matchPercent.round()}%",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -83,3 +89,4 @@ class UserCard extends StatelessWidget {
     );
   }
 }
+
