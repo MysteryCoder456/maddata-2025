@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maddata2025/message_page.dart';
 import 'package:maddata2025/profile.dart';
 import 'package:maddata2025/stats.dart';
-
+import 'package:maddata2025/add.dart';
 import 'browser.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         backgroundColor: Color(0xFF121212), // Background color
         appBar: AppBar(
@@ -36,6 +36,9 @@ class HomePage extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 3), // Adjust the bottom padding to move the icon higher
                         child: Icon(Icons.message, size: 36), )),
                 Tab(icon: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 3), // Adjust the bottom padding to move the icon higher
+                        child: Icon(Icons.add, size: 36), )),
+                Tab(icon: Padding(
                         padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
                         child: Icon(Icons.language_outlined, size: 36), )),
                 Tab(icon: Padding(
@@ -46,7 +49,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
-          children: [BrowserView(), MessagePage(), StatsPage(), ProfilePage()],
+          children: [BrowserView(), MessagePage(),MoodView(),StatsPage(), ProfilePage() ],
         ),
       ),
     );
