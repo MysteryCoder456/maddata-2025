@@ -84,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = client.auth.currentUser!.id;
+    final userId = client.auth.currentSession!.user.id;
     final stream = client
         .from('profiles')
         .stream(primaryKey: ['id'])
@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           body: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 100,
@@ -132,7 +132,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     shape: BoxShape.circle,
                     color: Colors.grey[700],
                   ),
-                  child: Icon(Icons.person, size: 50, color: Colors.white),
+                  child:
+                      avatarUrl == null
+                          ? Icon(Icons.person, size: 50, color: Colors.white)
+                          : ClipOval(child: Image.network(avatarUrl)),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -151,9 +154,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 //),
                 SizedBox(height: 40),
                 Text(
-                  "📝Bio: \n$bio",
+                  "📝Bio:",
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
+                Text(bio, style: TextStyle(color: Colors.white, fontSize: 16)),
               ],
             ),
           ),

@@ -51,24 +51,21 @@ Future<void> onAuthStateChanged(AuthState state) async {
       String spotifyId = userMetadata['provider_id'];
 
       // Fetch user's top tracks and artists
-      List<dynamic> topTracks = [];
-      List<dynamic> topArtists = [];
-      try {
-        topTracks = await getTopTracks(session.providerToken!);
-        topArtists = await getTopArtists(session.providerToken!);
-      } catch (e) {
-        print("Failed to fetch top stuff: $e");
-        return;
-      }
+      List<dynamic> topTracks = await getTopTracks(session.providerToken!);
+      List<dynamic> topArtists = await getTopArtists(session.providerToken!);
 
       // Upload to Supabase
-      await client.from('profiles').insert({
-        'id': session.user.id,
-        'display_name': displayName,
-        'avatar_url': avatarUrl,
-        'spotify_id': spotifyId,
-        'match_params': {'top_tracks': topTracks, 'top_artists': topArtists},
-      });
+      try {
+        await client.from('profiles').insert({
+          'id': session.user.id,
+          'display_name': displayName,
+          'avatar_url': avatarUrl,
+          'spotify_id': spotifyId,
+          'match_params': {'top_tracks': topTracks, 'top_artists': topArtists},
+        });
+      } catch (e) {
+        print(e);
+      }
 
       print("Spotify login was successful!");
       break;
