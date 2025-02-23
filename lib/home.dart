@@ -27,29 +27,60 @@ class HomePage extends StatelessWidget {
               dividerColor: Colors.transparent,
               tabs: [
                 Tab(
-                      icon: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
-                        child: Icon(Icons.home, size: 36), // Set your desired icon size here
-                      ),
-                    ),
-                Tab(icon: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3), // Adjust the bottom padding to move the icon higher
-                        child: Icon(Icons.message, size: 36), )),
-                Tab(icon: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3), // Adjust the bottom padding to move the icon higher
-                        child: Icon(Icons.add, size: 36), )),
-                Tab(icon: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
-                        child: Icon(Icons.language_outlined, size: 36), )),
-                Tab(icon: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5), // Adjust the bottom padding to move the icon higher
-                        child: Icon(Icons.perm_identity, size: 36),)),
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                    ), // Adjust the bottom padding to move the icon higher
+                    child: Icon(
+                      Icons.home,
+                      size: 36,
+                    ), // Set your desired icon size here
+                  ),
+                ),
+                Tab(
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 3,
+                    ), // Adjust the bottom padding to move the icon higher
+                    child: Icon(Icons.message, size: 36),
+                  ),
+                ),
+                Tab(
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 3,
+                    ), // Adjust the bottom padding to move the icon higher
+                    child: Icon(Icons.add, size: 36),
+                  ),
+                ),
+                Tab(
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                    ), // Adjust the bottom padding to move the icon higher
+                    child: Icon(Icons.language_outlined, size: 36),
+                  ),
+                ),
+                Tab(
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5,
+                    ), // Adjust the bottom padding to move the icon higher
+                    child: Icon(Icons.perm_identity, size: 36),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        body: const TabBarView(
-          children: [BrowserView(), MessagePage(),MoodView(),StatsPage(), ProfilePage() ],
+        body: TabBarView(
+          children: [
+            BrowserView(),
+            MessagePage(),
+            MoodView(),
+            StatsPage(),
+            ProfilePage(),
+          ],
         ),
       ),
     );
