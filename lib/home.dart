@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maddata2025/profile.dart';
+import 'package:maddata2025/stats.dart';
 
 import 'browser.dart';
 
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
         body: const TabBarView(
-          children: [BrowserView(), Text("TODO"), Text("TODO"), ProfilePage()],
+          children: [BrowserView(), Text("TODO"), StatsPage(), ProfilePage()],
         ),
       ),
     );
